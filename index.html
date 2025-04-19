@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dot Battle - Game & Instructions</title>
+  <style>
+    :root {
+      --cell-size: 60px;
+      --font-size: 2em;
+    }
+
+    @media (max-width: 600px) {
+      :root {
+        --cell-size: calc(100vw / 7);
+        --font-size: 4vw;
+      }
+    }
+
+    @media (max-width: 400px) {
+      :root {
+        --cell-size: calc(100vw / 7.5);
+        --font-size: 5vw;
+      }
+    }
+
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      text-align: center;
+      background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: clamp(1.5rem, 5vw, 2rem);
+    }
+
+    #message {
+      margin: 10px;
+      font-size: clamp(1rem, 3vw, 1.2rem);
+    }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(6, var(--cell-size));
+      gap: 5px;
+      justify-content: center;
+      margin: 20px auto;
+      max-width: 90vw;
+    }
+
+    .cell {
+      width: var(--cell-size);
+      height: var(--cell-size);
+      background: #fff;
+      border: 2px solid #ccc;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size);
+      transition: transform 0.1s;
+    }
+
+    .cell.disabled {
+      cursor: not-allowed;
+    }
+
+    .black {
+      color: #000;
+    }
+
+    .white {
+      color: #eee;
+      text-shadow: 0 0 5px #000;
+    }
+
+    /* Winning animation */
+    @keyframes blink {
+      0%, 100% { background-color: yellow; }
+      50% { background-color: orange; }
+    }
+
+    .win {
+      animation: blink 1s infinite;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      cursor: pointer;
+      margin: 5px;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    /* Container styles */
+    .container {
+      display: none;
+    }
+
+    #gameContainer {
+      display: block;
+    }
+
+    /* How To Play Styles */
+    #instructionsContainer {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    #instructionsContainer h1,
+    #instructionsContainer h2 {
+      text-align: center;
+    }
+
+    #instructionsContainer ul {
+      padding-left: 20px;
+    }
+
+    /* Ad Container Styles */
+    #ad-overlay {
+      height: 290px;
+      width: 300px;
+      position: absolute;
+      background-color: white;
+      display: none;
+      transform: translate(-50%, -50%);
+      left: 50%;
+      top: 50%;
+
+      p {
+        color: #000000;
+        font-size: 13px;
+        position: absolute;
+        bottom: -16px;
+        left: 0;
+        padding: 5px;
+      }
+    }
+    #close-start-btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+  </style>
+  <script type='text/javascript' src='//pl26425085.profitableratecpm.com/a6/ef/99/a6ef998f04228d3f7e099d0379b4c79e.js'></script>
+</head>
+<body>
+  <!-- Game Container -->
+  <div id="gameContainer" class="container">
+    <h1>Dot Battle</h1>
+    <div id="message">Current Turn: <span id="currentPlayer">Black (⚫)</span></div>
+    <div id="board"></div>
+    <button id="restartBtn">Restart Game</button>
+    <button id="howToPlayBtn">How to Play</button>
+  </div>
+  <!-- Instructions Container -->
+  <div id="instructionsContainer" class="container">
+    <h1>How to Play Dot Battle</h1>
+    <p>Welcome to <strong>Dot Battle</strong> – a strategic 1v1 game where the goal is to create the longest continuous chain of your dots on a 6x6 grid!</p>
+    <h2>1. Game Overview</h2>
+    <p>Two players take turns placing their colored dots on an empty grid:</p>
+    <ul>
+      <li><strong>Black Dots (⚫)</strong> for one player.</li>
+      <li><strong>White Dots (⚪)</strong> for the other player.</li>
+    </ul>
+    <p>Your aim is to form the longest connected chain of your dots. Chains connect horizontally, vertically, or diagonally.</p>
+    <h2>2. Game Setup</h2>
+    <p>The game board is a 6x6 grid. Every cell is empty at the start. Both players begin near the center (choose your spots during play).</p>
+    <h2>3. Taking Turns</h2>
+    <p>Players alternate turns. On your turn, click on an empty cell to place your dot. The current player is shown at the top of the game screen.</p>
+    <h2>4. Building Your Chain</h2>
+    <p>
+      <strong>Connected Dots:</strong> Dots connect if they touch horizontally, vertically, or diagonally.<br>
+      <strong>Strategic Placement:</strong> Extend your chain and block your opponent at the same time.
+    </p>
+    <h2>5. Winning the Game</h2>
+    <p>
+      Once all cells are filled, the game calculates the longest continuous chain for both players. The player with the longest chain wins! In case of a tie, it’s a draw. Winning cells will blink to celebrate the victory.
+    </p>
+    <h2>6. Restarting</h2>
+    <p>
+      Use the <strong>Restart Game</strong> button on the main game page to start a new match at any time.
+    </p>
+    <button id="backBtn">Back to Game</button>
+  </div>
+  <div id="ad-overlay">
+    <button id="close-start-btn">X</button>
+    <p>Visiting this small ad helps us to grow and update. Thanks for your support! 💖</p>
+  <!-- Adsterra Ads Code -->
+    <script type="text/javascript">
+	atOptions = {
+		'key' : 'd1ab09c01ab2e203e3236993dd511f73',
+		'format' : 'iframe',
+		'height' : 250,
+		'width' : 300,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/d1ab09c01ab2e203e3236993dd511f73/invoke.js"></script>
+  </div>
+  
+  <script>
+    // Elements
+    const gameContainer = document.getElementById('gameContainer');
+    const instructionsContainer = document.getElementById('instructionsContainer');
+    const boardEl = document.getElementById('board');
+    const messageEl = document.getElementById('message');
+    const currentPlayerEl = document.getElementById('currentPlayer');
+    const restartBtn = document.getElementById('restartBtn');
+    const howToPlayBtn = document.getElementById('howToPlayBtn');
+    const backBtn = document.getElementById('backBtn');
+    const adContainer = document.getElementById('adContainer');
+    const adoverlay = document.getElementById('ad-overlay');
+    const closeBtn = document.getElementById('close-start-btn');
+    const gridSize = 6;
+    let board = [];
+    let currentPlayer = 'black'; 
+    let gameOver = false;
+    let winningCells = []; 
+
+    function initGame() {
+      adoverlay.style.display = 'none';
+      board = [];
+      boardEl.innerHTML = '';
+      gameOver = false;
+      winningCells = [];
+      currentPlayer = 'black';
+      currentPlayerEl.textContent = "Black (⚫)";
+      for (let i = 0; i < gridSize; i++) {
+        board[i] = [];
+        for (let j = 0; j < gridSize; j++) {
+          board[i][j] = '';
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+          cell.dataset.row = i;
+          cell.dataset.col = j;
+          cell.addEventListener('click', onCellClick);
+          boardEl.appendChild(cell);
+        }
+      }
+    }
+
+    function onCellClick(e) {
+      if (gameOver) return;
+      const cell = e.target;
+      const row = parseInt(cell.dataset.row);
+      const col = parseInt(cell.dataset.col);
+      if (board[row][col] !== '') return;
+      board[row][col] = currentPlayer;
+      cell.textContent = currentPlayer === 'black' ? '⚫' : '⚪';
+      cell.classList.add(currentPlayer);
+      if (isBoardFull()) {
+        gameOver = true;
+        determineWinner();
+        return;
+      }
+      currentPlayer = currentPlayer === 'black' ? 'white' : 'black';
+      currentPlayerEl.textContent = currentPlayer === 'black' ? "Black (⚫)" : "White (⚪)";
+    }
+
+    function isBoardFull() {
+      return board.every(row => row.every(cell => cell !== ''));
+    }
+
+    function getLongestChain(player) {
+      const visited = Array.from({ length: gridSize }, () => Array(gridSize).fill(false));
+      let maxChain = 0;
+      let maxChainCells = [];
+      const directions = [
+        [-1, 0], [1, 0], [0, -1], [0, 1],
+        [-1, -1], [-1, 1], [1, -1], [1, 1]
+      ];
+      function dfs(r, c, chainCells) {
+        visited[r][c] = true;
+        chainCells.push({ r, c });
+        let count = 1;
+        for (const [dr, dc] of directions) {
+          const nr = r + dr, nc = c + dc;
+          if (nr >= 0 && nr < gridSize && nc >= 0 && nc < gridSize &&
+              !visited[nr][nc] && board[nr][nc] === player) {
+            count += dfs(nr, nc, chainCells);
+          }
+        }
+        return count;
+      }
+      for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+          if (!visited[i][j] && board[i][j] === player) {
+            let chainCells = [];
+            let chainLength = dfs(i, j, chainCells);
+            if (chainLength > maxChain) {
+              maxChain = chainLength;
+              maxChainCells = chainCells.slice();
+            }
+          }
+        }
+      }
+      return { maxChain, maxChainCells };
+    }
+
+    function determineWinner() {
+      const blackResult = getLongestChain('black');
+      const whiteResult = getLongestChain('white');
+      let winner;
+      if (blackResult.maxChain > whiteResult.maxChain) {
+        winner = 'Black (⚫)';
+        winningCells = blackResult.maxChainCells;
+      } else if (whiteResult.maxChain > blackResult.maxChain) {
+        winner = 'White (⚪)';
+        winningCells = whiteResult.maxChainCells;
+      } else {
+        winner = "It's a draw!";
+      }
+      showResult(winner);
+    }
+
+    function showResult(result) {
+      if (result === "It's a draw!") {
+        messageEl.textContent = result;
+      } else {
+        messageEl.textContent = result + " wins!";
+        animateWinningCells();
+      }
+      const cells = document.querySelectorAll('.cell');
+      cells.forEach(cell => cell.classList.add('disabled'));
+    }
+
+    function animateWinningCells() {
+      winningCells.forEach(({ r, c }) => {
+        const cell = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+        if (cell) {
+          cell.classList.add('win');
+        }
+      });
+    }
+
+    function restartGameWithAd() {
+      //initGame();
+      adoverlay.style.display = 'block';
+    }
+    closeBtn.addEventListener('click', initGame);
+
+    restartBtn.addEventListener('click', restartGameWithAd);
+    howToPlayBtn.addEventListener('click', () => {
+      gameContainer.style.display = 'none';
+      instructionsContainer.style.display = 'block';
+    });
+    backBtn.addEventListener('click', () => {
+      instructionsContainer.style.display = 'none';
+      gameContainer.style.display = 'block';
+    });
+
+    initGame();
+  </script>
+</body>
+</html>
